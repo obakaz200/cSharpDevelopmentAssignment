@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{58767F2D-B994-451E-8F0E-E7F45C547B47}</ProjectGuid>
+    <ProjectGuid>{EB783DE2-8539-4472-B8F7-DC9EAEBB5585}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>LearningOOP</RootNamespace>
-    <AssemblyName>LearningOOP</AssemblyName>
+    <RootNamespace>ConsoleApp6</RootNamespace>
+    <AssemblyName>ConsoleApp6</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,10 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="HrModule\Dogs.cs" />
-    <Compile Include="HrModule\Employee.cs" />
-    <Compile Include="HrModule\Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

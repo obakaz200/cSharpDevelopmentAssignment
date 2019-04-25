@@ -21,7 +21,7 @@ namespace BaseToBase
             {
                 Console.WriteLine("What base do you want to convert to?");
                 bool good = int.TryParse(Console.ReadLine(), out int numbase2);
-                if (good && numbase2 <= 9 || numbase == 16)
+                if (good && numbase2 <= 9 || numbase >= 11 && numbase <= 16)
                 {
                     Console.WriteLine("What is the number you want to covert");
                     string a = Console.ReadLine();
@@ -37,16 +37,16 @@ namespace BaseToBase
                     Console.WriteLine($"{a} from base{numbase} to base{numbase2} is");
                     Console.WriteLine(BaseToDec(a, numbase));
                 }
-                else if (good && numbase2 == 16)
+                else if (good &&  numbase2 >=11 && numbase2 <= 16)
                 {
                     Console.WriteLine("What is the number you want to covert");
                     string a = Console.ReadLine();
                     Console.WriteLine($"{a} from base{numbase} to base{numbase2} is");
                     int b = (BaseToDec(a, numbase));
-                    Console.WriteLine(DecToHexa(b));
+                    Console.WriteLine(DecToHexa(b, numbase2));
                 }
             }
-            else if (success && numbase == 16)
+            else if (success && numbase >= 11 && numbase <= 16)
             {
                 Console.WriteLine("What base do you want to convert to?");
                 bool good = int.TryParse(Console.ReadLine(), out int numbase2);
@@ -121,25 +121,26 @@ namespace BaseToBase
             }
             return deci;
         }
-        static string DecToHexa(int a)
+        static string DecToHexa(int a, int numbase2)
         {
             string c = a.ToString().ToUpper();
-            string hexMap = "0123456789abcdef".ToUpper();
+            string[] hexMap = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
             int remainder;
+            string rem = "";
             string basen = "";
-            string index="";
+           
             for (int i=0; i<c.Length; i++)
             {
-                string value = c.Substring(i, 1);
-                int values = hexMap.IndexOf(value);
+               
                 while (a > 0)
                 {
-                    remainder = a % 16;
-                    index += hexMap[remainder].ToString();
-                   
-                    a = a / 16;
-                    
-                    basen = remainder.ToString() + basen;
+                    remainder = a % numbase2;
+                    if (remainder >=0)
+                    {
+                        rem = hexMap[remainder];
+                    }
+                    a = a / numbase2;
+                    basen = rem  + basen;
                  }
             }
             return basen;

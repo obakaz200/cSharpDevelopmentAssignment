@@ -17,14 +17,15 @@ namespace IntegerToWords
                                         "ninety"};
         public static void Main()
         {
-            
+        
             Display();
+            
             Console.ReadLine();
         }
         static void Display()
         {
             Console.WriteLine("Please input the number you wish to convert to words");
-            bool success = int.TryParse(Console.ReadLine(), out int input);
+            bool success = long.TryParse(Console.ReadLine(), out long input);
             string c = input.ToString();
             if (success && input == 0)
             {
@@ -50,9 +51,17 @@ namespace IntegerToWords
             {
                 Console.WriteLine(Million(input));
             }
-            
+            else if (success && input >= 1000000000 & input <= 999999999999)
+            {
+                Console.WriteLine(Billion(input));
+            }
+            else if (success && input >= 1000000000000 & input <= 999999999999999)
+            {
+                Console.WriteLine(Trillion(input));
+            }
+
         }
-        static string First19(int input)
+        static string First19(long input)
         {
             if( input>0 && input<=19)
             {
@@ -60,7 +69,7 @@ namespace IntegerToWords
             }
             return ab;
         }
-        static string Tens(int input)
+        static string Tens(long input)
         {
 
             
@@ -73,23 +82,28 @@ namespace IntegerToWords
             }*/
              if ( input >= 20 && input <= 99)
             {
-                int firstDigit = input/10;
-                int secondDigit = input % 10;
+                long firstDigit = input/10;
+                long secondDigit = input % 10;
                 ab= tens[firstDigit]+" "+first19[secondDigit];
             }
             return ab;
             
         }
-        static string Hundreds(int input)
+        static string Hundreds(long input)
         {
             string a = input.ToString();
             if (a.Length==3)
             {
-                int firstDigit = input / 100;
-                int remainingDigit = input % 100;
+                long firstDigit = input / 100;
+                long remainingDigit = input % 100;
                 if (remainingDigit == 0)
                 {
                     ab = first19[firstDigit] + " hundred";
+                }
+                else if (remainingDigit <= 19)
+                {
+                    ab = first19[firstDigit] + " hundred and " +
+                    First19(remainingDigit);
                 }
                 else
                 {
@@ -100,23 +114,28 @@ namespace IntegerToWords
             }
             return ab;
         }
-        static string Thousand(int input)
+        static string Thousand(long input)
         {
             string a = input.ToString();
             if (a.Length == 4)
             {
-                int firstDigit = input / 1000;
-                int remainingDigit = input % 1000;
+                long firstDigit = input / 1000;
+                long remainingDigit = input % 1000;
                 if (remainingDigit == 0)
                 {
-                    ab= first19[firstDigit] + "thousand ";
+                    ab= first19[firstDigit] + " thousand ";
                 }
-                else if (remainingDigit <=99)
+                else if (remainingDigit > 0 && remainingDigit <= 19)
+                {
+                    ab = first19[firstDigit] + " thousand and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit >19 && remainingDigit <=99)
                 {
                     ab = first19[firstDigit] + "thousand and "+
                     Tens(remainingDigit);
                 }
-                else
+                else if (remainingDigit > 100 && remainingDigit <= 999)
                 {
                     ab=first19[firstDigit] + "thousand, "+ Hundreds(remainingDigit);
                 }
@@ -124,15 +143,33 @@ namespace IntegerToWords
             }
             else if (a.Length == 5)
             {
-                int firstDigit = input / 1000;
-                int remainingDigit = input % 1000;
-                int remainingDigit2 = input % 10000;
-                if (remainingDigit == 0)
+                long firstDigit = input / 1000;
+                long remainingDigit = input % 1000;
+               
+                
+                if (firstDigit <= 19)
                 {
-                    ab = firstDigit+
+                    ab = first19[firstDigit];
+                 }
+                else if (firstDigit > 19 && firstDigit <= 99)
+                {
+
+                    ab = Tens(firstDigit) +
+                    " thousand, " + Hundreds(remainingDigit);
+
+                }
+                 if (remainingDigit == 0)
+                {
+                    ab = Tens(firstDigit) +
                         " thousand ";
                 }
-                else if (remainingDigit <= 99)
+                 else if (remainingDigit > 0 && remainingDigit <= 19)
+                {
+                    ab = Tens(firstDigit) +
+                     " thousand and " +
+                     First19(remainingDigit);
+                }
+                else if (remainingDigit > 19 && remainingDigit <= 99)
                 {
                    ab= Tens(firstDigit)+
                     " thousand and "+
@@ -144,34 +181,35 @@ namespace IntegerToWords
                         " thousand, "+
                         Hundreds(remainingDigit);
                 }
-                else if (firstDigit <= 19)
-                {
-                    ab=first19[firstDigit] + " thousand "+
-                    Hundreds(remainingDigit);
-                    
-                }
-                else if (firstDigit > 19 && firstDigit <=99)
-                {
-
-                    ab=Tens(firstDigit)+
-                    " thousand, "+
-                    Hundreds(remainingDigit);
-                }
+                
 
             }
             else if (a.Length == 6)
             {
-                int firstDigit = input / 1000;
-                int remainingDigit = input % 1000;
-                if (remainingDigit == 0)
+
+                long firstDigit = input / 1000;
+                long remainingDigit = input % 1000;
+                if (firstDigit > 99 && firstDigit <= 999)
+                {
+
+                    ab = Hundreds(firstDigit) +
+                    " thousand, ";
+                }
+                  if (remainingDigit == 0)
                 {
                     ab= Hundreds(firstDigit)+
                     " thousand, ";
                 }
-                else if (remainingDigit <= 99)
+                else if (remainingDigit > 0 &&  remainingDigit <=19)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " thousand and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit > 19 && remainingDigit <= 99)
                 {
                     ab=Hundreds(firstDigit)+
-                    "thousand and "+
+                    " thousand and "+
                     Tens(remainingDigit);
                 }
                 else if (remainingDigit >= 100 && remainingDigit <= 999)
@@ -180,27 +218,45 @@ namespace IntegerToWords
                     " thousand, "+
                     Hundreds(remainingDigit);
                 }
+                
 
             }
             return ab;
         }
-        static string Million(int input)
+        static string Million(long input)
         {
             string a = input.ToString();
             if (a.Length == 7)
             {
-                int firstDigit = input / 1000000;
-                int remainingDigit = input % 1000000;
+                long firstDigit = input / 1000000;
+                long remainingDigit = input % 1000000;
                 if (remainingDigit == 0)
                 {
                     ab= first19[firstDigit] + " million ";
                 }
-                else if (remainingDigit <= 99)
+                else if (remainingDigit <= 19)
+                {
+                    ab = first19[firstDigit] + " million and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit>19 && remainingDigit <= 99)
                 {
                     ab=first19[firstDigit] + " million and "+
                     Tens(remainingDigit);
                 }
-                
+                else if (remainingDigit >= 100 && remainingDigit <= 999)
+                {
+                    ab = first19[firstDigit] +
+                    " million, " +
+                    Hundreds(remainingDigit);
+                }
+                else if (remainingDigit >= 1000 && remainingDigit <= 999999)
+                {
+                    ab = first19[firstDigit] +
+                    " million, " +
+                    Thousand(remainingDigit);
+                }
+
                 else
                 {
                    ab=first19[firstDigit] + " million, "+
@@ -210,14 +266,37 @@ namespace IntegerToWords
             }
             else if (a.Length == 8)
             {
-                int firstDigit = input / 1000000;
-                int remainingDigit = input % 1000000;
-                if (remainingDigit == 0)
+                long firstDigit = input / 1000000;
+                long remainingDigit = input % 1000000;
+                 if (firstDigit <= 19)
+                {
+                    ab = first19[firstDigit];
+
+                }
+                else if (firstDigit > 19 && firstDigit <= 99)
+                {
+
+                    ab = Tens(firstDigit) +
+                    " million, ";
+                }
+                else if (firstDigit > 99 && firstDigit <= 999)
+                {
+
+                    ab = Hundreds(firstDigit) +
+                    " million, ";
+                }
+                 if (remainingDigit == 0)
                 {
                     ab=Tens(firstDigit)+
                    " million, ";
                 }
-                else if (remainingDigit <= 99)
+                else if (remainingDigit <= 19)
+                {
+                    ab = Tens(firstDigit) +
+                    " million and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit >19 && remainingDigit <= 99)
                 {
                     ab= Tens(firstDigit)+
                     " million and "+
@@ -235,41 +314,41 @@ namespace IntegerToWords
                     " million, "+
                     Thousand(remainingDigit);
                 }
-                else if (firstDigit <= 19)
-                {
-                    ab=first19[firstDigit] + " million "+
-                    Thousand(remainingDigit);
-
-                }
-                else if (firstDigit > 19 && firstDigit <= 99)
-                {
-
-                    ab=Tens(firstDigit)+
-                    " million, "+
-                    Hundreds(remainingDigit);
-                }
-                else if (firstDigit > 99 && firstDigit <= 999)
-                {
-
-                    ab=Hundreds(firstDigit)+
-                    " million, "+
-                    Thousand(remainingDigit);
-                }
+                
 
             }
             else if (a.Length == 9)
             {
-                int firstDigit = input / 1000000;
-                int remainingDigit = input % 1000000;
-                if (remainingDigit == 0)
+                long firstDigit = input / 1000000;
+                long remainingDigit = input % 1000000;
+                 if (firstDigit > 19 && firstDigit <= 99)
                 {
-                    ab=Hundreds(firstDigit)+
-                    "million, ";
+
+                    ab = Tens(firstDigit) +
+                    " million, " ;
                 }
-                else if (remainingDigit <= 99)
+                else if (firstDigit > 99 && firstDigit <= 999)
+                {
+
+                    ab = Hundreds(firstDigit) +
+                    " million, ";
+                }
+
+                 if (remainingDigit == 0)
                 {
                     ab=Hundreds(firstDigit)+
-                    "million and "+
+                    " million, ";
+                }
+                else if (remainingDigit <= 19)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " million and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit >19 &&remainingDigit <= 99)
+                {
+                    ab=Hundreds(firstDigit)+
+                    " million and "+
                     Tens(remainingDigit);
                 }
                 else if (remainingDigit >= 100 && remainingDigit <= 999)
@@ -284,23 +363,371 @@ namespace IntegerToWords
                     " million, "+
                     Thousand(remainingDigit);
                 }
+                
+            }
+            return ab;
+        }
+        static string Billion(long input)
+        {
+            string a = input.ToString();
+            if (a.Length == 10)
+            {
+                long firstDigit = input / 1000000000;
+                long remainingDigit = input % 1000000000;
+                if (remainingDigit == 0)
+                {
+                    ab = first19[firstDigit] + " billion ";
+                }
+                else if (remainingDigit <= 19)
+                {
+                    ab = first19[firstDigit] + " billion and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit >19 && remainingDigit <= 99)
+                {
+                    ab = first19[firstDigit] + " billion and " +
+                    Tens(remainingDigit);
+                }
+                else if (remainingDigit >= 100 && remainingDigit <= 999)
+                {
+                    ab = first19[firstDigit] +
+                    " billion, " +
+                    Hundreds(remainingDigit);
+                }
+                else if (remainingDigit >= 1000 && remainingDigit <= 999999)
+                {
+                    ab = first19[firstDigit] +
+                    " billion, " +
+                    Thousand(remainingDigit);
+                }
+                else if (remainingDigit >= 1000000 && remainingDigit <= 999999999)
+                {
+                    ab = first19[firstDigit] +
+                    " billion, " +
+                    Million(remainingDigit);
+                }
+
+                else
+                {
+                    ab = first19[firstDigit] + " billion, " +
+                     Million(remainingDigit);
+                }
+
+            }
+            else if (a.Length == 11)
+            {
+                long firstDigit = input / 1000000000;
+                long remainingDigit = input % 1000000000;
+                if (firstDigit <= 19)
+                {
+                    ab = first19[firstDigit] + " billion " ;
+
+                }
                 else if (firstDigit > 19 && firstDigit <= 99)
                 {
 
-                    ab= Tens(firstDigit)+
-                    " million, "+
+                    ab = Tens(firstDigit) +
+                    " billion, ";
+                   
+                }
+                
+                if (remainingDigit == 0)
+                {
+                    ab = Tens(firstDigit) +
+                   " billion, ";
+                }
+                else if (remainingDigit <= 19)
+                {
+                    ab = Tens(firstDigit) +
+                    " billion and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit>19 && remainingDigit <= 99)
+                {
+                    ab = Tens(firstDigit) +
+                    " billion and " +
+                    Tens(remainingDigit);
+                }
+                else if (remainingDigit >= 100 && remainingDigit <= 999)
+                {
+                    ab = Tens(firstDigit) +
+                    " billion, " +
                     Hundreds(remainingDigit);
+                }
+                else if (remainingDigit >= 1000 && remainingDigit <= 999999)
+                {
+                    ab = Tens(firstDigit) +
+                    " billion, " +
+                    Thousand(remainingDigit);
+                }
+                else if (remainingDigit >= 1000000 && remainingDigit <= 999999999)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " billion, " +
+                    Million(remainingDigit);
+                }
+                
+
+            }
+            else if (a.Length == 12)
+            {
+                long firstDigit = input / 1000000000;
+                long remainingDigit = input % 1000000000;
+                 if (firstDigit <= 19)
+                {
+                    ab = first19[firstDigit] + " billion ";
+
+                }
+                else if (firstDigit > 19 && firstDigit <= 99)
+                {
+
+                    ab = Tens(firstDigit) +
+                    " billion, " ;
                 }
                 else if (firstDigit > 99 && firstDigit <= 999)
                 {
 
-                    ab=Hundreds(firstDigit)+
-                    " million, "+
+                    ab = Hundreds(firstDigit) +
+                    " billion, " ;
+                }
+                 if (remainingDigit == 0)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " billion, ";
+                }
+                else if (remainingDigit <= 19)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " billion and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit >19 && remainingDigit <= 99)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " billion and " +
+                    Tens(remainingDigit);
+                }
+                else if (remainingDigit >= 100 && remainingDigit <= 999)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " billion, " +
+                    Hundreds(remainingDigit);
+                }
+                else if (remainingDigit >= 1000 && remainingDigit <= 999999)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " billion, " +
                     Thousand(remainingDigit);
                 }
+                else if (remainingDigit >= 1000000 && remainingDigit <= 999999999)
+                {
+                    ab = Hundreds(firstDigit) +
+                    " billion, " +
+                    Million(remainingDigit);
+                }
+                else if (firstDigit > 19 && firstDigit <= 99)
+                {
+
+                    ab = Tens(firstDigit) +
+                    " billion, " +
+                   Million(remainingDigit);
+                }
+                else if (firstDigit > 99 && firstDigit <= 999)
+                {
+
+                    ab = Hundreds(firstDigit) +
+                    " billion, " +
+                    Million(remainingDigit);
+                }
+            }
+            return ab;
+        }
+        static string Trillion(long input)
+        {
+            string a = input.ToString();
+            if (a.Length == 13)
+            {
+                long firstDigit = input / 1000000000000;
+                long remainingDigit = input % 1000000000000;
+                if (remainingDigit == 0)
+                {
+                    ab = first19[firstDigit] + " trillion ";
+                }
+                else if (remainingDigit <= 19)
+                {
+                    ab = first19[firstDigit] + " trillion and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit > 19 && remainingDigit <= 99)
+                {
+                    ab = first19[firstDigit] + " trillion and " +
+                    Tens(remainingDigit);
+                }
+                else if (remainingDigit >= 100 && remainingDigit <= 999)
+                {
+                    ab = first19[firstDigit] +
+                    " trillion, " +
+                    Hundreds(remainingDigit);
+                }
+                else if (remainingDigit >= 1000 && remainingDigit <= 999999)
+                {
+                    ab = first19[firstDigit] +
+                    " trillion, " +
+                    Thousand(remainingDigit);
+                }
+                else if (remainingDigit >= 1000000 && remainingDigit <= 999999999)
+                {
+                    ab = first19[firstDigit] +
+                    " trillion, " +
+                    Million(remainingDigit);
+                }
+                else if (remainingDigit >= 1000000000 && remainingDigit <= 999999999999)
+                {
+                    ab = first19[firstDigit] +
+                    " trillion, " +
+                    Billion(remainingDigit);
+                }
+
+                else
+                {
+                    ab = first19[firstDigit] + " trillion, " +
+                     Billion(remainingDigit);
+                }
+
+            }
+            else if (a.Length == 14)
+            {
+                long firstDigit = input / 1000000000000;
+                long remainingDigit = input % 1000000000000;
+                if (firstDigit <= 19)
+                {
+                    ab = first19[firstDigit] + " trillion ";
+                   
+
+                }
+                else if (firstDigit > 19 && firstDigit <= 99)
+                {
+
+                    ab = Tens(firstDigit) +
+                    " trillion, ";
+                    
+                }
+                else if (firstDigit > 99 && firstDigit <= 999)
+                {
+
+                    ab = Hundreds(firstDigit) +
+                    " trillion, ";
+                    
+                }
+                 if (remainingDigit == 0)
+                {
+                    ab = Tens(firstDigit) +
+                   " trillion, ";
+                }
+                else if (remainingDigit <= 19)
+                {
+                    ab = Tens(firstDigit) +
+                    " trillion and " +
+                    First19(remainingDigit);
+                }
+                else if (remainingDigit > 19 && remainingDigit <= 99)
+                {
+                    ab = Tens(firstDigit) +
+                    " trillion and " +
+                    Tens(remainingDigit);
+                }
+                else if (remainingDigit >= 100 && remainingDigit <= 999)
+                {
+                    ab = Tens(firstDigit) +
+                    " trillion, " +
+                    Hundreds(remainingDigit);
+                }
+                else if (remainingDigit >= 1000 && remainingDigit <= 999999)
+                {
+                    ab = Tens(firstDigit) +
+                    " trillion, " +
+                    Thousand(remainingDigit);
+                }
+                else if (remainingDigit >= 1000000 && remainingDigit <= 999999999)
+                {
+                    ab = Tens(firstDigit) +
+                    " trillion, " +
+                    Million(remainingDigit);
+                }
+                else if (remainingDigit >= 1000000000 && remainingDigit <= 999999999999)
+                {
+                    ab = Tens(firstDigit) +
+                    " trillion, " +
+                    Billion(remainingDigit);
+                }
+                 
+
+            }
+            else if (a.Length == 15)
+            {
+                long firstDigit = input / 1000000000000;
+                long remainingDigit = input % 1000000000000;
+                if (firstDigit > 19 && firstDigit <= 99)
+                {
+
+                    ab = Tens(firstDigit) +
+                    " trillion, " ;
+                }
+                else if (firstDigit > 99 && firstDigit <= 999)
+                {
+
+                    ab = Hundreds(firstDigit) +
+                    " trillion, " ;
+                }
+                
+                     if (remainingDigit == 0)
+                    {
+                        ab = Hundreds(firstDigit) +
+                        " trillion, ";
+                    }
+                    else if (remainingDigit <= 19)
+                    {
+                        ab = Hundreds(firstDigit) +
+                        " trillion and " +
+                        First19(remainingDigit);
+                    }
+                    else if (remainingDigit > 19 && remainingDigit <= 99)
+                    {
+                        ab = Hundreds(firstDigit) +
+                        " trillion and " +
+                        Tens(remainingDigit);
+                    }
+                    else if (remainingDigit >= 100 && remainingDigit <= 999)
+                    {
+                        ab = Hundreds(firstDigit) +
+                        " trillion, " +
+                        Hundreds(remainingDigit);
+                    }
+                    else if (remainingDigit >= 1000 && remainingDigit <= 999999)
+                    {
+                        ab = Hundreds(firstDigit) +
+                        " trillion, " +
+                        Thousand(remainingDigit);
+                    }
+                    else if (remainingDigit >= 1000000 && remainingDigit <= 999999999)
+                    {
+                        ab = Hundreds(firstDigit) +
+                        " trillion, " +
+                        Million(remainingDigit);
+                    }
+                    else if (remainingDigit >= 1000000000 && remainingDigit <= 999999999999)
+                    {
+                        ab = Hundreds(firstDigit) +
+                        " trillion, " +
+                        Billion(remainingDigit);
+                    }
+                
+                 
 
             }
             return ab;
         }
+
+       
     }
 }
