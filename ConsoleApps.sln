@@ -47,6 +47,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityFunctions", "Utility
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "App\App.csproj", "{6E0ED302-7B7B-439D-B6D0-5461F4EC1B8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemCostingPlatform", "ItemCostingPlatform\ItemCostingPlatform.csproj", "{F3C6B421-2A67-400C-A5E5-BE10A01C12D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemPricingPlatform", "ItemPricingPlatform\ItemPricingPlatform.csproj", "{9E553F4A-71FD-490E-B4E7-75382C6642BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +145,14 @@ Global
 		{6E0ED302-7B7B-439D-B6D0-5461F4EC1B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E0ED302-7B7B-439D-B6D0-5461F4EC1B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E0ED302-7B7B-439D-B6D0-5461F4EC1B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3C6B421-2A67-400C-A5E5-BE10A01C12D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3C6B421-2A67-400C-A5E5-BE10A01C12D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3C6B421-2A67-400C-A5E5-BE10A01C12D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3C6B421-2A67-400C-A5E5-BE10A01C12D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E553F4A-71FD-490E-B4E7-75382C6642BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E553F4A-71FD-490E-B4E7-75382C6642BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E553F4A-71FD-490E-B4E7-75382C6642BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E553F4A-71FD-490E-B4E7-75382C6642BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
